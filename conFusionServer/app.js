@@ -11,11 +11,13 @@ var authenticate = require('./authenticate');
 var config = require('./config');
 
 
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
+var uploadRouter = require('./routes/uploadRouter');
 
 const Dishes = require('./models/dishes');
 
@@ -37,14 +39,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Secure traffic only
-app.all('*', (req, res, next) => {
-  if (req.secure) {
-    return next();
-  }
-  else {
-    res.redirect(307, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
-  }
-});
+// app.all('*', (req, res, next) => {
+//   if (req.secure) {
+//     return next();
+//   }
+//   else {
+//     res.redirect(307, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
+//   }
+// });
 
 app.use(session({
   name: 'session-id',
@@ -59,6 +61,8 @@ app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/imageUpload',uploadRouter);
+
 
 
 app.use(express.static(path.join(__dirname, 'public')));
